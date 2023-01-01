@@ -64,18 +64,17 @@ function playround(playerSelection, computerSelection){
 }
 
 function score (player, computer, message){
-  let score_tracker = [player, computer];
-
+  // Tracks the score at each turn
   if (message == "Tie!") {
   }
   else if (message.substring(0, 8) == "You Win!") {
-    score_tracker[0]++;
+    player[0]++;
   }
   else {
-    score_tracker[1]++;
+    computer[1]++;
   }
 
-  return score_tracker;
+  return [player, computer];
 }
 
 function who_won(score_tracker){
