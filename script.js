@@ -50,10 +50,10 @@ function capitalize(word){
 function playround(playerSelection, computerSelection){
   // Takes two selections and determines the winner
   let player = capitalize(playerSelection);
-  let message;
+  let win;
   
   if (player == computerSelection){
-    message = "Tie!";
+    message = "Tie!"
   } else if ((wins_against_dict[player]).includes(computerSelection)){
     message = "You Win! " + player + " beats " + computerSelection;
   } else {
@@ -63,3 +63,48 @@ function playround(playerSelection, computerSelection){
   return message;
 }
 
+function score (player, computer, message){
+  let score_tracker = [player, computer];
+
+  if (message == "Tie!") {
+  }
+  else if (message.substring(0, 8) == "You Win!") {
+    score_tracker[0]++;
+  }
+  else {
+    score_tracker[1]++;
+  }
+
+  return score_tracker;
+}
+
+function who_won(score_tracker){
+  if(score_tracker[0] == score_tracker[1]){
+    console.log("Its a tie game: " + score_tracker[0] + " - " + score_tracker[1]);
+  } else if (score_tracker[0] > score_tracker[1]) {
+    console.log("You won: " + score_tracker[0] + " - " + score_tracker[1]);
+  } else {
+    console.log("You lost: " + score_tracker[0] + " - " + score_tracker[1] + "\nBetter luck next time! ")
+  }
+}
+
+function game(){
+  let score_tracker = [0, 0];
+  let message;
+
+  for (let i = 0; i < 5; i++){
+    let player = prompt("Enter your selection");
+
+    console.log(message = playround(player, getComputerChoice()));
+
+    score_tracker = score(score_tracker[0], score_tracker[1], message);
+
+    console.log("Score: " + score_tracker[0] + " - " + score_tracker[1]);
+  }
+  
+  console.log("GG!\n");
+
+  who_won(score_tracker);  
+}
+
+game();
