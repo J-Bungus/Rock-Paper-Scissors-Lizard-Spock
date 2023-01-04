@@ -1,5 +1,5 @@
 // Each key beats each of the values in the lists
-let wins_against_dict = {
+let winsAgainstDict = {
   "Scissors": ["Paper", "Lizard"],
   "Paper": ["Spock", "Rock"],
   "Rock": ["Scissors", "Lizard"],
@@ -47,7 +47,7 @@ function capitalize(word){
 }
 
 
-function playround(playerSelection, computerSelection){
+function playRound(playerSelection, computerSelection){
   // Takes two selections and determines the winner
   let player = capitalize(playerSelection);
   let win;
@@ -77,7 +77,8 @@ function score (player, computer, message){
   return [player, computer];
 }
 
-function who_won(score_tracker){
+function whoWon (score_tracker){
+  // Outputs a message depending on who won after 5 rounds and displays final scores
   if(score_tracker[0] == score_tracker[1]){
     console.log("Its a tie game: " + score_tracker[0] + " - " + score_tracker[1]);
   } else if (score_tracker[0] > score_tracker[1]) {
@@ -88,6 +89,7 @@ function who_won(score_tracker){
 }
 
 function game(){
+  // Runs a 5-round game
   let score_tracker = [0, 0];
   let message;
 
