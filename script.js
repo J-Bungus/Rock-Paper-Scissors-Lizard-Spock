@@ -1,3 +1,8 @@
+const resultDisplay = document.querySelector('#result');
+const scoreDisplay = document.querySelector('#score');
+const body = document.querySelector('body');
+const scoreBoard = [0, 0];
+
 // Each key beats each of the values in the lists
 let wins_against_dict = {
   "Scissors": ["Paper", "Lizard"],
@@ -47,63 +52,106 @@ function capitalize(word){
 }
 
 
-function playround(playerSelection, computerSelection){
+function playRound(playerSelection, computerSelection){
   // Takes two selections and determines the winner
   let player = capitalize(playerSelection);
-  let win;
+  let result;
   
   if (player == computerSelection){
-    message = "Tie!"
+    result = 0;
   } else if ((wins_against_dict[player]).includes(computerSelection)){
-    message = "You Win! " + player + " beats " + computerSelection;
+    result = 1;
   } else {
-    message = "You Lose! " + computerSelection + " beats " + player;
+    result = 2; 
+  }
+
+  return result;
+}
+
+function roundResult(playerSelection, computerSelection, result) {
+  let message;
+
+  if (result == 0) {
+    message = "Tie!"
+  }
+  else if (result == 1) {
+    message = "You WON! " + playerSelection + " beats " + computerSelection;
+  }
+  else {
+    message = "You lost! " + computerSelection + " beats " + playerSelection;
   }
 
   return message;
 }
 
-function score (player, computer, message){
+function score (player, computer, result){
   // Tracks the score at each turn
-  if (message == "Tie!") {
+  if (result == 0) {
   }
-  else if (message.substring(0, 8) == "You Win!") {
-    player[0]++;
+  else if (result == 1) {
+    player++;
   }
   else {
-    computer[1]++;
+    computer++;
   }
 
   return [player, computer];
 }
 
-function who_won(score_tracker){
-  if(score_tracker[0] == score_tracker[1]){
-    console.log("Its a tie game: " + score_tracker[0] + " - " + score_tracker[1]);
-  } else if (score_tracker[0] > score_tracker[1]) {
-    console.log("You won: " + score_tracker[0] + " - " + score_tracker[1]);
-  } else {
-    console.log("You lost: " + score_tracker[0] + " - " + score_tracker[1] + "\nBetter luck next time! ")
-  }
-}
-
-function game(){
-  let score_tracker = [0, 0];
+function finalResult(scoreTracker){
   let message;
 
-  for (let i = 0; i < 5; i++){
-    let player = prompt("Enter your selection");
-
-    console.log(message = playround(player, getComputerChoice()));
-
-    score_tracker = score(score_tracker[0], score_tracker[1], message);
-
-    console.log("Score: " + score_tracker[0] + " - " + score_tracker[1]);
+  if(scoreTracker[0] == scoreTracker[1]){
+    message = "Its a tie game: " + scoreTracker[0] + " - " + scoreTracker[1];
+  } 
+  else if (scoreTracker[0] > scoreTracker[1]) {
+    message = "You won: " + scoreTracker[0] + " - " + scoreTracker[1];
+  } 
+  else {
+    message = "You lost: " + scoreTracker[0] + " - " + scoreTracker[1] + "\nBetter luck next time!";
   }
-  
-  console.log("GG!\n");
 
-  who_won(score_tracker);  
+  return message;
 }
 
-game();
+function resultFormat (playerSelection, computerSelection, result, scoreTracker) {
+
+  resultDisplay.textContent = roundResult(playerSelection, computerSelection, result);
+  resultDisplay.setAttribute('style', 'color: white; font-size: 40px; font-weight: bold');
+}
+
+function scoreBoardFormat (scoreTracker) {
+  scoreDisplay.textContent = "Score: " + scoreTracker[0] + " - " + scoreTracker[1];
+}
+
+function game(playerSelection, scoreTracker){
+  let result;
+
+  computerSelection = getComputerChoice();
+
+  result = playRound(playerSelection, computerSelection);
+
+  scoreTracker = score(scoreTracker[0], scoreTracker[1], result);
+
+  resultFormat(playerSelection, computerSelection, result);
+
+  return scoreTracker;
+}
+
+const btns = document.querySelectorAll('button');
+
+btns.forEach((button) => {
+  button.addEventListener('click', () => {
+    let scores = game(button.id, scoreBoard);
+    scoreBoardFormat(scores);
+    scoreBoard[0] = scores[0];
+    scoreBoard[1] = scores[1];
+
+    if (scoreBoard[0] == 5 || scoreBoard[1] == 5) {
+      alert(finalResult(scoreBoard));
+      scoreBoard[0] = 0;
+      scoreBoard[1] = 0;
+      scoreBoardFormat(scoreBoard);
+    }
+  })
+})
